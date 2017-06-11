@@ -78,9 +78,10 @@ module.exports = generator.extend({
                 description: this.desc,
                 main: "src/library.js",
                 scripts: {
-                    devServer: "webpack-dev-server",
-                    dev: "webpack",
-                    prod: "webpack -p"
+                    devServer: "webpack-dev-server --env dev",
+                    dev: "webpack --env dev",
+                    testFile: "webpack --env test",
+                    prod: "webpack --env build"
                 },
                 author: this.author,
                 license: "ISC",
@@ -129,6 +130,10 @@ module.exports = generator.extend({
                     libraryName: this.libraryName
                     //app: this.config.get('ngappname')
                 }
+            );
+            this.fs.copy(
+                this.templatePath('_project_tests.js'),
+                this.destinationPath('project_tests.js')
             );
         },
         html: function(){
