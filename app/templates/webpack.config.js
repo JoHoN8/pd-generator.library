@@ -4,45 +4,46 @@ const UglifyJsPlugin = webpack.optimize.UglifyJsPlugin;
 const packageData = require("./package.json");
 const env  = require('yargs').argv.env;
 
-let entryPoint = null;
+let entryPoint = './src/library.js';
 let plugins = [];
 let output = null;
 let external = {
-    "jquery": { 
-        commonjs: 'jquery', 
-        commonjs2: 'jquery', 
-        amd: 'jquery', 
-        root: '$' 
-    } 
+    jquery: {
+        commonjs: 'jquery',
+        commonjs2: 'jquery',
+        amd: 'jquery',
+        root: '$'
+    },
+    'pd-sputil': {
+        commonjs: 'pd-sputil',
+        commonjs2: 'pd-sputil',
+        amd: 'pd-sputil',
+        root: 'pdsputil'
+    }
 };
 
-if (env === 'dev') {
+if (env === 'dev' || env === 'build') {
     entryPoint = './src/library.js';
     output = {
         path: path.resolve(__dirname, "./dist"),
         filename: `${packageData.name}.js`,
         libraryTarget: 'umd',
-        library: 'projectName' //this will be the global variable to hook into
+        library: 'SET THIS' //this will be the global variable to hook into
     };
 }
 if(env === 'build') {
+    output.filename = `${packageData.name}.min.js`;
     plugins.push(new UglifyJsPlugin({ minimize: true }));
-    entryPoint = './src/library.js';
-    output = {
-        path: path.resolve(__dirname, "./dist"),
-        filename: `${packageData.name}.min.js`,
-        libraryTarget: 'umd',
-        library: 'projectName' //this will be the global variable to hook into
-    };
 }
 if(env === 'test') {
-    entryPoint = './spUtil_tests.js';
+    entryPoint = './project_tests.js';
     output = {
         path: path.resolve(__dirname, "./tests"),
-        filename: "project_tests.js",
+        filename: "SET THIS",
     };
-    // to exclude file from compile
-    //external['./src/library.js'] = "pdsputil";
+    external['./src/library.js'] = "pdspserverajax";
+    external.jquery = "jQuery";
+    external['pd-sputil'] = "pdsputil";
 }
 
 module.exports = {
@@ -52,11 +53,13 @@ module.exports = {
         rules:[
             {  
                 test: /\.js$/,
-                exclude: /node_modules/,
+                //exclude: /node_modules/,
                 use: {
                     loader: 'babel-loader',
                     options: {
-                        presets: ['es2015']
+                        presets: [
+                             ['es2015', {modules: false}]
+                        ]
                     }
                 }
             }
@@ -64,5 +67,6 @@ module.exports = {
     },
     plugins: plugins,
     externals: external,
-    devtool: 'source-map'
+    //devtool: 'source-map'
 };
+
