@@ -110,8 +110,8 @@ module.exports = generator.extend({
         },
         appStaticFiles: function(){
             this.fs.copy(
-                this.templatePath('jshintrc'),
-                this.destinationPath('.jshintrc')
+                this.templatePath('.eslintrc.json'),
+                this.destinationPath('.eslintrc.json')
             );
             this.fs.copy(
                 this.templatePath('webpack.config.js'),
