@@ -98,7 +98,7 @@ module.exports = generator.extend({
             packageFile.devDependencies["babel-core"] = "latest";
             packageFile.devDependencies["babel-loader"] = "latest";
             packageFile.devDependencies["babel-preset-es2015"] = "latest";
-            packageFile.devDependencies["del"] = "latest";
+            packageFile.devDependencies["babel-preset-stage-0"] = "latest";
             packageFile.devDependencies["webpack"] = "latest";
             packageFile.devDependencies["webpack-dev-server"] = "latest";
             //this.copy('_package.json', 'package.json');
