@@ -79,9 +79,8 @@ module.exports = generator.extend({
                 main: "src/library.js",
                 scripts: {
                     devServer: "webpack-dev-server --env dev",
-                    dev: "webpack --env dev",
-                    testFile: "webpack --env test",
-                    prod: "webpack --env build"
+                    dev: "webpack --env dev --config ./webpackConfigs/webpack.config.js",
+                    prod: "webpack --env prod --config ./webpackConfigs/webpack.config.js"
                 },
                 author: this.author,
                 license: "ISC",
@@ -115,7 +114,7 @@ module.exports = generator.extend({
             );
             this.fs.copy(
                 this.templatePath('webpack.config.js'),
-                this.destinationPath('webpack.config.js')
+                this.destinationPath('webpackConfigs/webpack.config.js')
             );
             this.fs.copy(
                 this.templatePath('README.md'),
