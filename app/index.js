@@ -113,12 +113,19 @@ module.exports = generator.extend({
                 this.destinationPath('.eslintrc.json')
             );
             this.fs.copy(
+                this.templatePath('gitignore'),
+                this.destinationPath('.gitignore')
+            );
+            this.fs.copy(
                 this.templatePath('webpack.config.js'),
                 this.destinationPath('webpackConfigs/webpack.config.js')
             );
-            this.fs.copy(
+            this.fs.copyTpl(
                 this.templatePath('README.md'),
-                this.destinationPath('README.md')
+                this.destinationPath('README.md'),
+                {
+                    libraryName: this.libraryName
+                }
             );
         },
         scripts: function(){
@@ -150,7 +157,7 @@ module.exports = generator.extend({
     },
     install: function(){
         //this.bowerInstall();
-        this.yarnInstall();
+        this.npmInstall();
     },
     end: function(){
         this.log(chalk.yellow.bold('Installation successful!'));
