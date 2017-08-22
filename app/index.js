@@ -78,7 +78,7 @@ module.exports = generator.extend({
                 description: this.desc,
                 main: "src/library.js",
                 scripts: {
-                    devServer: "webpack-dev-server --env dev",
+                    testFile: "webpack --config ./webpackConfigs/webpack.config.testing.js",
                     dev: "webpack --env dev --config ./webpackConfigs/webpack.config.js",
                     prod: "webpack --env prod --config ./webpackConfigs/webpack.config.js"
                 },
@@ -117,8 +117,8 @@ module.exports = generator.extend({
                 this.destinationPath('.gitignore')
             );
             this.fs.copy(
-                this.templatePath('webpack.config.js'),
-                this.destinationPath('webpackConfigs/webpack.config.js')
+                this.templatePath('webpackConfigs/*'),
+                this.destinationPath('webpackConfigs/')
             );
             this.fs.copyTpl(
                 this.templatePath('README.md'),
@@ -139,7 +139,7 @@ module.exports = generator.extend({
             );
             this.fs.copy(
                 this.templatePath('_project_tests.js'),
-                this.destinationPath('project_tests.js')
+                this.destinationPath('tests/project_tests.js')
             );
         },
         html: function(){

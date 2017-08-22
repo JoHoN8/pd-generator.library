@@ -1,11 +1,11 @@
 const path = require('path');
 const webpack = require('webpack');
-const packageData = require("./package.json");
+const packageData = require("../package.json");
 
 module.exports = function(env) {
     let plugins = [];
     let output = {
-        path: path.resolve(__dirname, "./dist"),
+        path: path.resolve(__dirname, "../dist"),
         filename: `${packageData.name}.js`,
         libraryTarget: 'umd',
         library: 'SET THIS' //this will be the global variable to hook into
