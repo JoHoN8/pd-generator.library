@@ -1,6 +1,6 @@
 //<%= ngapp %> to add text in file
 'use strict';
-var generator = require('yeoman-generator'),
+var Generator = require('yeoman-generator'),
     chalk = require('chalk'),
     yosay = require('yosay'),
     includes = function (ary, lib) {
@@ -9,16 +9,16 @@ var generator = require('yeoman-generator'),
         return val > -1;
     };
 
-module.exports = generator.extend({
-    constructor: function(){
-        generator.apply(this, arguments);
+module.exports = class extends Generator{
+    constructor(args, opts) {
+        super(args,opts);
         
         this.includes = includes;
         
-    },  
-    initializing: function(){
-    },
-    prompting: function(){
+    };
+    initializing() {
+    };
+    prompting() {
         var self = this;
 
         this.log(yosay('Welcome to ' + 
@@ -73,104 +73,102 @@ module.exports = generator.extend({
             //done(); 
         });
             
-    },
-    configuring: function(){
-    },
-    writing: {
-        packageJSON: function(){
-            var packageFile = {
-                name: this.libraryName,
-                version: "1.0.0",
-                description: this.desc,
-                main: "src/library.js",
-                scripts: {
-                    "testFile": "webpack --config ./webpackConfigs/webpack.config.testing.js",
-                    "devBuild": "webpack --config ./webpackConfigs/webpack.config.dev.js",
-                    "prodBuild": "webpack --config ./webpackConfigs/webpack.config.prod.js"
-                },
-                author: this.author,
-                license: "ISC",
-                dependencies: {},
-                devDependencies: {}
-            };
+    };
+    configuring() {
+    };
+    packageJSON() {
+        var packageFile = {
+            name: this.libraryName,
+            version: "1.0.0",
+            description: this.desc,
+            main: "src/library.js",
+            scripts: {
+                "testFile": "webpack --config ./webpackConfigs/webpack.config.testing.js",
+                "devBuild": "webpack --config ./webpackConfigs/webpack.config.dev.js",
+                "prodBuild": "webpack --config ./webpackConfigs/webpack.config.prod.js"
+            },
+            author: this.author,
+            license: "ISC",
+            dependencies: {},
+            devDependencies: {}
+        };
 
-            //dependencies
-            if(this.includeAxios) {packageFile.dependencies["axios"] = "latest";}
-            if(this.includeJquery) {packageFile.dependencies["jquery"] = "latest";}
-            if(this.includeLodash) {packageFile.dependencies["lodash"] = "latest";}
-            if(this.includeMoment) {packageFile.dependencies["moment"] = "latest";}
-            
-            //devDependencies
-            packageFile.devDependencies["webpack"] = "latest";
-            packageFile.devDependencies["clean-webpack-plugin"] = "latest";
-            packageFile.devDependencies["html-webpack-plugin"] = "latest";
-            packageFile.devDependencies["webpack-dev-server"] = "latest";
-            packageFile.devDependencies["babel-core"] = "latest";
-            packageFile.devDependencies["babel-loader"] = "latest";
-            packageFile.devDependencies["babel-preset-env"] = "latest";
-            packageFile.devDependencies["babel-preset-stage-0"] = "latest";
-            packageFile.devDependencies["eslint"] = "latest";
-            packageFile.devDependencies["npm-run-all"] = "latest";
-            //this.copy('_package.json', 'package.json');
+        //dependencies
+        if(this.includeAxios) {packageFile.dependencies["axios"] = "latest";}
+        if(this.includeJquery) {packageFile.dependencies["jquery"] = "latest";}
+        if(this.includeLodash) {packageFile.dependencies["lodash"] = "latest";}
+        if(this.includeMoment) {packageFile.dependencies["moment"] = "latest";}
+        
+        //devDependencies
+        packageFile.devDependencies["webpack"] = "latest";
+        packageFile.devDependencies["clean-webpack-plugin"] = "latest";
+        packageFile.devDependencies["html-webpack-plugin"] = "latest";
+        packageFile.devDependencies["webpack-dev-server"] = "latest";
+        packageFile.devDependencies["babel-core"] = "latest";
+        packageFile.devDependencies["babel-loader"] = "latest";
+        packageFile.devDependencies["babel-preset-env"] = "latest";
+        packageFile.devDependencies["babel-preset-stage-0"] = "latest";
+        packageFile.devDependencies["eslint"] = "latest";
+        packageFile.devDependencies["npm-run-all"] = "latest";
+        //this.copy('_package.json', 'package.json');
 
-            this.fs.writeJSON(
-                this.destinationPath('package.json'),
-                packageFile
-            );
-        },
-        appStaticFiles: function(){
-            this.fs.copy(
-                this.templatePath('.eslintrc.json'),
-                this.destinationPath('.eslintrc.json')
-            );
-            this.fs.copy(
-                this.templatePath('gitignore'),
-                this.destinationPath('.gitignore')
-            );
-            this.fs.copy(
-                this.templatePath('webpackConfigs/**'),
-                this.destinationPath('webpackConfigs/')
-            );
-            this.fs.copyTpl(
-                this.templatePath('README.md'),
-                this.destinationPath('README.md'),
-                {
-                    libraryName: this.libraryName
-                }
-            );
-        },
-        scripts: function(){
-            this.fs.copyTpl(
-                this.templatePath('lib/_lib.js'),
-                this.destinationPath('src/library.js'),
-                {
-                    libraryName: this.libraryName
-                    //app: this.config.get('ngappname')
-                }
-            );
-            this.fs.copy(
-                this.templatePath('_project_tests.js'),
-                this.destinationPath('tests/project_tests.js')
-            );
-        },
-        html: function(){
-            this.fs.copyTpl(
-                this.templatePath('_index.html'),
-                this.destinationPath('tests/index.html'),
-                {
-                    libraryName: this.libraryName
-                    //app: this.config.get('ngappname')
-                }
-            );
-        }
-    },
-    conflicts: function(){
-    },
-    install: function(){
+        this.fs.writeJSON(
+            this.destinationPath('package.json'),
+            packageFile
+        );
+    };
+    appStaticFiles() {
+        this.fs.copy(
+            this.templatePath('.eslintrc.json'),
+            this.destinationPath('.eslintrc.json')
+        );
+        this.fs.copy(
+            this.templatePath('gitignore'),
+            this.destinationPath('.gitignore')
+        );
+        this.fs.copy(
+            this.templatePath('webpackConfigs/**'),
+            this.destinationPath('webpackConfigs/')
+        );
+        this.fs.copyTpl(
+            this.templatePath('README.md'),
+            this.destinationPath('README.md'),
+            {
+                libraryName: this.libraryName
+            }
+        );
+    };
+    scripts() {
+        this.fs.copyTpl(
+            this.templatePath('lib/_lib.js'),
+            this.destinationPath('src/library.js'),
+            {
+                libraryName: this.libraryName
+                //app: this.config.get('ngappname')
+            }
+        );
+        this.fs.copy(
+            this.templatePath('_project_tests.js'),
+            this.destinationPath('tests/project_tests.js')
+        );
+    };
+    html() {
+        this.fs.copyTpl(
+            this.templatePath('_index.html'),
+            this.destinationPath('tests/index.html'),
+            {
+                libraryName: this.libraryName
+                //app: this.config.get('ngappname')
+            }
+        );
+    };
+    conflicts() {
+    };
+    install() {
         //this.bowerInstall();
         this.npmInstall();
-    },
-    end: function(){
+    };
+    end() {
         this.log(chalk.yellow.bold('Installation successful!'));
-    }
-});
+    };
+};
