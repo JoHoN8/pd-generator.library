@@ -37,9 +37,14 @@ module.exports = generator.extend({
             message: 'Which JS libraries would you like to include?',
             choices: [
                 {
+                    name: 'axios',
+                    value: 'axios',
+                    checked: true
+                },
+                {
                     name: 'jQuery',
                     value: 'jquery',
-                    checked: true
+                    checked: false
                 },
                 {
                     name: 'lodash',
@@ -54,12 +59,13 @@ module.exports = generator.extend({
                 {
                     name: 'Numeral',
                     value: 'numeral',
-                    checked: true
+                    checked: false
                 }
             ]
         }]).then(function(answers){
             self.libraryName = answers.libraryName.toLowerCase();
 
+            self.includeAxios = self.includes(answers.jslibs, 'axios');
             self.includeJquery = self.includes(answers.jslibs, 'jquery');
             self.includeLodash = self.includes(answers.jslibs, 'lodash');
             self.includeMoment = self.includes(answers.jslibs, 'moment');             
@@ -78,9 +84,9 @@ module.exports = generator.extend({
                 description: this.desc,
                 main: "src/library.js",
                 scripts: {
-                    devServer: "webpack-dev-server --env dev",
-                    dev: "webpack --env dev --config ./webpackConfigs/webpack.config.js",
-                    prod: "webpack --env prod --config ./webpackConfigs/webpack.config.js"
+                    "testFile": "webpack --config ./webpackConfigs/webpack.config.testing.js",
+                    "devBuild": "webpack --config ./webpackConfigs/webpack.config.dev.js",
+                    "prodBuild": "webpack --config ./webpackConfigs/webpack.config.prod.js"
                 },
                 author: this.author,
                 license: "ISC",
@@ -89,17 +95,22 @@ module.exports = generator.extend({
             };
 
             //dependencies
+            if(this.includeAxios) {packageFile.dependencies["axios"] = "latest";}
             if(this.includeJquery) {packageFile.dependencies["jquery"] = "latest";}
             if(this.includeLodash) {packageFile.dependencies["lodash"] = "latest";}
             if(this.includeMoment) {packageFile.dependencies["moment"] = "latest";}
             
             //devDependencies
+            packageFile.devDependencies["webpack"] = "latest";
+            packageFile.devDependencies["clean-webpack-plugin"] = "latest";
+            packageFile.devDependencies["html-webpack-plugin"] = "latest";
+            packageFile.devDependencies["webpack-dev-server"] = "latest";
             packageFile.devDependencies["babel-core"] = "latest";
             packageFile.devDependencies["babel-loader"] = "latest";
-            packageFile.devDependencies["babel-preset-es2015"] = "latest";
+            packageFile.devDependencies["babel-preset-env"] = "latest";
             packageFile.devDependencies["babel-preset-stage-0"] = "latest";
-            packageFile.devDependencies["webpack"] = "latest";
-            packageFile.devDependencies["webpack-dev-server"] = "latest";
+            packageFile.devDependencies["eslint"] = "latest";
+            packageFile.devDependencies["npm-run-all"] = "latest";
             //this.copy('_package.json', 'package.json');
 
             this.fs.writeJSON(
@@ -117,8 +128,8 @@ module.exports = generator.extend({
                 this.destinationPath('.gitignore')
             );
             this.fs.copy(
-                this.templatePath('webpack.config.js'),
-                this.destinationPath('webpackConfigs/webpack.config.js')
+                this.templatePath('webpackConfigs/**'),
+                this.destinationPath('webpackConfigs/')
             );
             this.fs.copyTpl(
                 this.templatePath('README.md'),
@@ -139,13 +150,13 @@ module.exports = generator.extend({
             );
             this.fs.copy(
                 this.templatePath('_project_tests.js'),
-                this.destinationPath('project_tests.js')
+                this.destinationPath('tests/project_tests.js')
             );
         },
         html: function(){
             this.fs.copyTpl(
                 this.templatePath('_index.html'),
-                this.destinationPath('index.html'),
+                this.destinationPath('tests/index.html'),
                 {
                     libraryName: this.libraryName
                     //app: this.config.get('ngappname')

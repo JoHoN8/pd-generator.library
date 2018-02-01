@@ -4,7 +4,7 @@ or function name and false if fails
 */
 
 import * as spu from 'pd-sputil';
-import * as spa from './src/library.js';
+import * as spa from '../src/library.js';
 
 var $ = require('jquery');
 
