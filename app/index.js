@@ -73,44 +73,59 @@ module.exports = class extends Generator{
             //done(); 
         });
             
-    };
-    configuring() {
-    };
-    packageJSON() {
-        var packageFile = {
-            name: this.libraryName,
-            version: "1.0.0",
-            description: this.desc,
-            main: "src/library.js",
-            scripts: {
-                "testFile": "webpack --config ./webpackConfigs/webpack.config.testing.js",
-                "devBuild": "webpack --config ./webpackConfigs/webpack.config.dev.js",
-                "prodBuild": "webpack --config ./webpackConfigs/webpack.config.prod.js"
-            },
-            author: this.author,
-            license: "ISC",
-            dependencies: {},
-            devDependencies: {}
-        };
+    },
+    configuring: function(){
+    },
+    writing: {
+        packageJSON: function(){
+            var packageFile = {
+                name: this.libraryName,
+                version: "1.0.0",
+                description: this.desc,
+                main: "src/library.js",
+                scripts: {
+                    "testFile": "webpack --config ./webpackConfigs/webpack.config.testing.js",
+                    "devBuild": "webpack --config ./webpackConfigs/webpack.config.dev.js",
+                    "production": "webpack --config ./webpackConfigs/webpack.config.prod.js",
+                    "prodBuild": "run-s devBuild production",
+                    "docs": "jsdoc2md ./src/library.js > README.md"
+                },
+                repository: {
+                    "type": "git",
+                    "url": "https://github.com/JoHoN8/pd-sputil.git"
+                  },
+                  keywords: [
+                    "sharepoint"
+                  ],
+                  author: {
+                    "name": "Jered McGlohon",
+                    "email": "puredirective@gmail.com",
+                    "url": "https://github.com/JoHoN8"
+                  },
+                license: "ISC",
+                dependencies: {},
+                devDependencies: {}
+            };
 
-        //dependencies
-        if(this.includeAxios) {packageFile.dependencies["axios"] = "latest";}
-        if(this.includeJquery) {packageFile.dependencies["jquery"] = "latest";}
-        if(this.includeLodash) {packageFile.dependencies["lodash"] = "latest";}
-        if(this.includeMoment) {packageFile.dependencies["moment"] = "latest";}
-        
-        //devDependencies
-        packageFile.devDependencies["webpack"] = "latest";
-        packageFile.devDependencies["clean-webpack-plugin"] = "latest";
-        packageFile.devDependencies["html-webpack-plugin"] = "latest";
-        packageFile.devDependencies["webpack-dev-server"] = "latest";
-        packageFile.devDependencies["babel-core"] = "latest";
-        packageFile.devDependencies["babel-loader"] = "latest";
-        packageFile.devDependencies["babel-preset-env"] = "latest";
-        packageFile.devDependencies["babel-preset-stage-0"] = "latest";
-        packageFile.devDependencies["eslint"] = "latest";
-        packageFile.devDependencies["npm-run-all"] = "latest";
-        //this.copy('_package.json', 'package.json');
+            //dependencies
+            if(this.includeAxios) {packageFile.dependencies["axios"] = "latest";}
+            if(this.includeJquery) {packageFile.dependencies["jquery"] = "latest";}
+            if(this.includeLodash) {packageFile.dependencies["lodash"] = "latest";}
+            if(this.includeMoment) {packageFile.dependencies["moment"] = "latest";}
+            
+            //devDependencies
+            packageFile.devDependencies["webpack"] = "latest";
+            packageFile.devDependencies["clean-webpack-plugin"] = "latest";
+            packageFile.devDependencies["html-webpack-plugin"] = "latest";
+            packageFile.devDependencies["webpack-dev-server"] = "latest";
+            packageFile.devDependencies["babel-core"] = "latest";
+            packageFile.devDependencies["babel-loader"] = "latest";
+            packageFile.devDependencies["babel-preset-env"] = "latest";
+            packageFile.devDependencies["babel-preset-stage-0"] = "latest";
+            packageFile.devDependencies["eslint"] = "latest";
+            packageFile.devDependencies["npm-run-all"] = "latest";
+            packageFile.devDependencies["jsdoc-to-markdown"] = "latest";
+            //this.copy('_package.json', 'package.json');
 
         this.fs.writeJSON(
             this.destinationPath('package.json'),

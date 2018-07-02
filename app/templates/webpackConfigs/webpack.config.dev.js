@@ -11,7 +11,7 @@ module.exports = function(env) {
             path: path.resolve(__dirname, "../dist"),
             filename: './[name].js',
             libraryTarget: 'umd',
-            library: 'SET THIS' //this will be the global variable to hook into
+            library: 'pdspserverajax' //this will be the global variable to hook into
         },
         module:{
             rules:[
@@ -32,14 +32,7 @@ module.exports = function(env) {
             new cleanWebpackPlugin(['dist'], settings.cleanOptions)
         ],
         devtool: 'inline-source-map',
-        externals: {
-            "file-saver": {
-                commonjs: 'file-saver',
-                commonjs2: 'file-saver',
-                amd: 'file-saver',
-                root: 'saveAs'
-            }
-        }
+        externals: settings.externals
     };
 };
 
