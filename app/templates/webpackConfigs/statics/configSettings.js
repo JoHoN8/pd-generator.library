@@ -10,6 +10,9 @@ module.exports = {
 	cleanOptions: {
         root: path.resolve(__dirname, "../../")
 	},
+	testCleanOptions: {
+        root: path.resolve(__dirname, "../../tests")
+	},
 	UglifyJsOptions: {
 		sourceMap: true
 	},
@@ -29,6 +32,20 @@ module.exports = {
 			"stage-0"
 		],
 		plugins: []
+	},
+	externals: {
+		"pd-sputil": {
+			commonjs: 'pd-sputil',
+			commonjs2: 'pd-sputil',
+			amd: 'pd-sputil',
+			root: 'pdsputil'
+		},
+		"axois": {
+			commonjs: 'axios',
+			commonjs2: 'axios',
+			amd: 'axios',
+			root: 'axios'
+		}
 	},
 	styleSheetNames: {
 		dev: {

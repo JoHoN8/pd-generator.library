@@ -1,7 +1,6 @@
 module.exports = function(env) {
     const path = require('path'),
         webpack = require('webpack'),
-        cleanWebpackPlugin = require('clean-webpack-plugin'),
         settings = require('./statics/configSettings.js');
     
     return {
@@ -10,9 +9,9 @@ module.exports = function(env) {
         },
         output: {
             path: path.resolve(__dirname, "../dist"),
-            filename: './[name].js',
+            filename: './[name].min.js',
             libraryTarget: 'umd',
-            library: 'SET THIS' //this will be the global variable to hook into
+            library: 'pdspserverajax' //this will be the global variable to hook into
         },
         module:{
             rules:[
@@ -30,19 +29,11 @@ module.exports = function(env) {
             extensions: ['.js', '.css', '.json']
         },
         plugins: [
-            new cleanWebpackPlugin(['dist'], settings.cleanOptions),
             new webpack.optimize.UglifyJsPlugin(settings.UglifyJsOptions),
             new webpack.DefinePlugin(settings.defineOptions)
         ],
         devtool: 'source-map',
-        externals: {
-            "file-saver": {
-                commonjs: 'file-saver',
-                commonjs2: 'file-saver',
-                amd: 'file-saver',
-                root: 'saveAs'
-            }
-        }
+        externals: settings.externals
     };
 };
 

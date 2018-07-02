@@ -1,19 +1,13 @@
 module.exports = function(env) {
     const path = require('path'),
         cleanWebpackPlugin = require('clean-webpack-plugin'),
-        HtmlWebpackPlugin = require('html-webpack-plugin'),
-        settings = require('./statics/configSettings.js'),
-        ExtractTextPlugin = require('extract-text-webpack-plugin'),
-        extractCSS = new ExtractTextPlugin(settings.styleSheetNames.dev.css),
-        extractSCSS  = new ExtractTextPlugin(settings.styleSheetNames.dev.scss);
+        settings = require('./statics/configSettings.js');
 
     return {
-        entry: {
-            main: '../tests/project_tests.js'
-        },
+        entry: './tests/project_tests',
         output: {
             path: path.resolve(__dirname, "../tests"),
-            filename: `${packageData.name}_tests.js`,
+            filename: "spServerAjax_tests.js",
         },
         module:{
             rules:[
@@ -31,10 +25,7 @@ module.exports = function(env) {
             extensions: ['.js', '.css', '.json']
         },
         plugins: [
-            new cleanWebpackPlugin(['dist'], settings.cleanOptions),
-            new HtmlWebpackPlugin(settings.htmlPluginOptions),
-            extractCSS,
-            extractSCSS
+            new cleanWebpackPlugin(['spServerAjax_tests.js'], settings.testCleanOptions)
         ],
         devtool: 'inline-source-map',
         externals: {}

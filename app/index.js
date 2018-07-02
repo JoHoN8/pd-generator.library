@@ -86,9 +86,22 @@ module.exports = generator.extend({
                 scripts: {
                     "testFile": "webpack --config ./webpackConfigs/webpack.config.testing.js",
                     "devBuild": "webpack --config ./webpackConfigs/webpack.config.dev.js",
-                    "prodBuild": "webpack --config ./webpackConfigs/webpack.config.prod.js"
+                    "production": "webpack --config ./webpackConfigs/webpack.config.prod.js",
+                    "prodBuild": "run-s devBuild production",
+                    "docs": "jsdoc2md ./src/library.js > README.md"
                 },
-                author: this.author,
+                repository: {
+                    "type": "git",
+                    "url": "https://github.com/JoHoN8/pd-sputil.git"
+                  },
+                  keywords: [
+                    "sharepoint"
+                  ],
+                  author: {
+                    "name": "Jered McGlohon",
+                    "email": "puredirective@gmail.com",
+                    "url": "https://github.com/JoHoN8"
+                  },
                 license: "ISC",
                 dependencies: {},
                 devDependencies: {}
@@ -111,6 +124,7 @@ module.exports = generator.extend({
             packageFile.devDependencies["babel-preset-stage-0"] = "latest";
             packageFile.devDependencies["eslint"] = "latest";
             packageFile.devDependencies["npm-run-all"] = "latest";
+            packageFile.devDependencies["jsdoc-to-markdown"] = "latest";
             //this.copy('_package.json', 'package.json');
 
             this.fs.writeJSON(
